@@ -22,7 +22,7 @@ public class Config
 	];
 
 	// GitHub usernames to add as reviewers on every PR
-	public List<string> Reviewers { get; init; } =
+	public HashSet<string> Reviewers { get; init; } =
 	[
 		// keep this empty because they are added automatically as code owners.
 		// "Nick-Nilga",

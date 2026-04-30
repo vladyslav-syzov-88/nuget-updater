@@ -20,7 +20,7 @@ if (string.IsNullOrEmpty(credUser) || string.IsNullOrEmpty(credPass))
 
 GitHub.Configure(config.GitHubOrg, credPass);
 
-if (!GitHub.CheckAuth())
+if (!await GitHub.CheckAuthAsync())
 {
 	Log.Fail("GitHub authentication failed. Run 'gh auth login' or re-clone a GitHub repo to refresh stored credentials.");
 	Environment.Exit(1);
@@ -124,7 +124,9 @@ foreach (string repoUrl in config.Repositories)
 		}
 
 		if (updateFailed)
+		{
 			break;
+		}
 	}
 
 	if (!anyPackageFound)
@@ -210,7 +212,7 @@ foreach (string repoUrl in config.Repositories)
 
 	Log.Step("Creating pull request...");
 
-	var (prOk, prUrl) = GitHub.CreatePullRequest(
+	var (prOk, prUrl) = await GitHub.CreatePullRequestAsync(
 		repo: repoName,
 		title: config.PullRequestTitle,
 		body: config.PrBody,
@@ -273,7 +275,9 @@ static string FindSolutionRoot()
 	while (dir is not null)
 	{
 		if (dir.EnumerateFiles("*.slnx").Any())
+		{
 			return dir.FullName;
+		}
 		dir = dir.Parent;
 	}
 	return AppContext.BaseDirectory;
