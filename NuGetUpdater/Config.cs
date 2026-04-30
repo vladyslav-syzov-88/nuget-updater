@@ -4,34 +4,37 @@ namespace NuGetUpdater;
 //  CONFIGURATION — edit these values before running
 // ==============================================================================
 
+/// <summary>A NuGet package name and optional pinned version to update.</summary>
 public record NuGetPackage(string Name, string Version = "");
 
+/// <summary>All user-editable settings for a single run. Edit this file before executing the tool.</summary>
 public class Config
 {
-	public string JiraTicketUrl    { get; init; } = "https://telenor-ose.atlassian.net/browse/";
-	public string JiraTicketId     { get; init; } = "T40TB-488";
-	public string SemVerBump       { get; init; } = "major";   // patch | minor | major
-	public string BaseBranch       { get; init; } = "development";
-	public string BitbucketBaseUrl { get; init; } = "http://stash.iux.sonofon.dk:7990";
+	public string JiraTicketUrl { get; init; } = "https://telenor-ose.atlassian.net/browse/";
+	public string JiraTicketId { get; init; } = "BMRT-9470";
+	public string SemVerBump { get; init; } = "major";   // patch | minor | major
+	public string BaseBranch { get; init; } = "develop";
+	public string GitHubOrg { get; init; } = "TelenorInternal";
 
 	public List<NuGetPackage> Packages { get; init; } =
 	[
-		new("Telenor.Api.Core.Web", "24.0.0.5"),
+		new("Telenor.Api.Models", "37.7.0.10"),
 	];
 
-	// Bitbucket usernames to add as reviewers on every PR
-	public List<string> Reviewers { get; init; } = ["MYKO", "CATK", "VLOR", "TEAMNIK"];
+	// GitHub usernames to add as reviewers on every PR
+	public List<string> Reviewers { get; init; } = ["Nick-Nilga", "kate-krivko", "VLOR-telenor-dk", "Mary-Nikiforova"];
 
 	private string PackageSummary => Packages.Count == 1
 		? Packages[0].Name
 		: "NuGet packages";
 
 	public string FeatureBranchName => Packages.Count == 1
-		? $"feature/{JiraTicketId}-update-{Packages[0].Name.ToLower()}"
+		? $"feature/{JiraTicketId}-update-{Packages[0].Name.ToLower()}-add-product-order-intent"
 		: $"feature/{JiraTicketId}-update-nugets";
 
-	public string CommitMessage     => $"{JiraTicketId} +semver: {SemVerBump} update {PackageSummary}";
-	public string PullRequestTitle  => $"{JiraTicketId} Update {PackageSummary}";
+	// public string CommitMessage     => $"{JiraTicketId} +semver: {SemVerBump} update {PackageSummary}";
+	public string CommitMessage => $"{JiraTicketId} update {PackageSummary} (add Product Order Intent)";
+	public string PullRequestTitle => $"{JiraTicketId} Update {PackageSummary} (add Product Order Intent)";
 
 	public string PrBody =>
 		$"""
@@ -57,21 +60,9 @@ public class Config
 
 	public List<string> Repositories { get; init; } =
 	[
-		"http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.accountmanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.appointmentmanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.billmanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.communicationmanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.customermanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.partymanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.productcatalog.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.productinventorymanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.productofferingqualification.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.productorderingmanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.productorders.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.producttemplates.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.resourcemanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.stockmanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.troubleticketmanagement.service.git",
-		// "http://stash.iux.sonofon.dk:7990/scm/osa/telenor.api.usermanagement.service.git",
+		// "https://github.com/TelenorInternal/dk-s11020-telenor-api-product-offering-qualification-service.git",
+		// "https://github.com/TelenorInternal/dk-s11020-telenor-api-product-ordering-management-service.git",
+		// "https://github.com/TelenorInternal/dk-s11020-telenor-api-product-orders-service.git",
+		"https://github.com/TelenorInternal/dk-s11020-telenor-api-user-management-service.git",
 	];
 }

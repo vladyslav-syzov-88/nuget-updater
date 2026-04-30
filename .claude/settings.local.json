@@ -5,7 +5,21 @@
       "Bash(dotnet new *)",
       "Bash(dotnet sln *)",
       "Bash(git config *)",
-      "Bash(dotnet run *)"
+      "Bash(dotnet run *)",
+      "Bash(dotnet format *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\": \"Before finishing: verify README.md is in sync with all code changes made in this session. If any behaviour, configuration, prerequisites, or workflow changed — update README.md now.\"}'",
+            "shell": "powershell"
+          }
+        ]
+      }
     ]
   }
 }

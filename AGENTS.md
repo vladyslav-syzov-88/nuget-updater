@@ -109,6 +109,37 @@ The file has two sections separated by the `HELPERS` banner:
    - `Shell` — process execution (`AssertPrerequisite`, `Run`, `Capture`) plus private `Execute` and `BuildPsi` helpers.
    - `Bitbucket` — REST API client (`ResolveCredentials`, `Configure`, `CheckAuth`, `CreatePullRequest`).
 
+## EditorConfig compliance
+
+All code changes must follow the rules in `.editorconfig` at the repo root. Key rules:
+
+- **Indentation** — tabs, width 4
+- **Line endings** — CRLF
+- **No trailing whitespace**, no final newline at end of file
+- **Namespaces** — file-scoped (`namespace Foo;`)
+- **`using` directives** — `System.*` first, no blank line between groups
+- **Static fields** — PascalCase (e.g. `Client`, not `_client`)
+- **Instance private fields** — `_camelCase`
+- **Naming** — types and members PascalCase; parameters and locals camelCase; async methods end with `Async`
+
+After every change verify with:
+
+```powershell
+dotnet format NuGetUpdater/NuGetUpdater.csproj --verify-no-changes
+```
+
+If it reports changes, run without `--verify-no-changes` to auto-fix, then re-run to confirm clean.
+
+## Build verification
+
+After every code change, run:
+
+```powershell
+dotnet build NuGetUpdater/NuGetUpdater.csproj --configuration Release
+```
+
+The build must succeed with **0 warnings and 0 errors**. If warnings appear, resolve them before considering the task done — do not leave new warnings behind. Warnings treated as noise accumulate and mask real problems.
+
 ## Conventions
 
 - **No extra NuGet dependencies** — `NuGetUpdater.csproj` has no `<PackageReference>` entries; keep it that way. Use BCL APIs only (`System.Net.Http`, `System.Text.Json`, etc. are all in-box).
