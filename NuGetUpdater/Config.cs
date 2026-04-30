@@ -22,7 +22,14 @@ public class Config
 	];
 
 	// GitHub usernames to add as reviewers on every PR
-	public List<string> Reviewers { get; init; } = ["Nick-Nilga", "kate-krivko", "VLOR-telenor-dk", "Mary-Nikiforova"];
+	public List<string> Reviewers { get; init; } =
+	[
+		// keep this empty because they are added automatically as code owners.
+		// "Nick-Nilga",
+		// "kate-krivko",
+		// "VLOR-telenor-dk",
+		// "Mary-Nikiforova"
+	];
 
 	private string PackageSummary => Packages.Count == 1
 		? Packages[0].Name
